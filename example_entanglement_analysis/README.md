@@ -318,3 +318,37 @@ freqG4BB                                                                        
 ```
 
 Note: pandas summaries may display incorrect informaiton. Slice data to observe true residues.
+
+## Running analysis on example trajectory:
+1) go to the `entanglement_analysis` folder, where contains `command_entanglement_analysis.sh` file
+
+In `entanglement_analysis/setup` folder, we provided all files required for running entanglement analysis:
+
+* python script for analysis: `topology_analysis_v9.3.py`
+* config file: `topology_analysis_v9.3.config`
+* secondary structure definitions: `2ww4_sec_structure.txt`
+* native structure of protein: `2ww4_chain_a_rebuilt_mini.pdb`
+
+In `traj` folder, we provide a trajectory with 100 frames (`md_protein_nopbc_100frames.xtc`) and topology to load trajectory (`newbox.gro`)
+
+2) Execute the following command from `entanglement_analysis` folder :
+
+```bash
+python setup/topology_analysis_v9.3.py setup/topology_analysis_v9.3.config 2ww4_ ../traj/md_protein_nopbc_100frames.xtc 0 -1 1 
+```
+
+The above command will run an analysis on all frames in the provided trajectory.
+The analysis is quite fast, it takes about 1s for for each frame.
+
+The script will create a folder `topology_analysis_9.3` containing subfolder `output` where the resulting pandas data frame file (`*.df`) file saved there.
+
+3) For the gain of non-native entanglement structure, we are interested in the number of contacts gain entanglement only (G0: gain of entanglement without changing chirality and G1: gain of entanglement and change in chirality). 
+    To extract the number of contacts gain entanglement, use the following code snippet:
+
+```python
+import pandas as pd 
+
+df = pd.read_pickle(f'2ww4__s0_e-1_m1.df')
+df_gain = df[['frame_num', 'time', 'freqG0AA', 'freqG1AA']]
+df_gain.to_csv('gain_entanglement.dat', sep='\t', float_format="%8f")
+```
