@@ -10,7 +10,9 @@ This command generates `datapoints.dat` and `survival_{TEMP}.dat`.
 `datapoints.dat` is disentanglement/unfolding rate and 95% confidence interval.
 For testing, please change variable `nboots` to a small value. In the papers, we use `nboots=10000` iterations.
 
-3) `python curve_fit.py`
+
+
+2) `python curve_fit.py`
 
 This command requires survival probability data from the previous command to plot data using Matplotlib. 
 
