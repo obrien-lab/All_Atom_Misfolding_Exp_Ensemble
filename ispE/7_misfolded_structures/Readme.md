@@ -1,0 +1,1 @@
+This directory contains PDB files for each misfolded cluster, with 10 structures per cluster. The first structure, named Cluster_X_0.pdb, is the selected structure for all-atom simulations used in the Arrhenius analyses.
