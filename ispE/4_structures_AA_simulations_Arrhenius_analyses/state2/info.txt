@@ -1,0 +1,25 @@
+State #2
+Q: 0.926400
+G: 0.050100
+Consistent experiment signals: ['L202', 'K204', 'E206', 'K76-T161']
+Changes in entanglement cluster IDs: [19]
+Trajectory number: 20
+Frame number: 43
+----------------------------------------------------------------
+L202: M: 938.5489
+K204: M: 853.0388
+E206: M: 736.5504
+K76-T161: M: 0.0022 Jwalk: 29.4929
+----------------------------------------------------------------
+19:
+    code: ['L-C#', 'L#C#']
+    GLN: [-0.17157894218465125, -0.3109902803197833]
+    ref_GLN: [-1.087122448179156, -0.5065264581909095]
+    linking_number: [0, 0]
+    ref_linking_number: [-1, 0]
+    native_contact: [28, 195]
+    ref_native_contact: [28, 195]
+    crossing_resid: [[], []]
+    ref_crossing_resid: [[7], []]
+    crossing_pattern: ['', '']
+    ref_crossing_pattern: ['-', '']

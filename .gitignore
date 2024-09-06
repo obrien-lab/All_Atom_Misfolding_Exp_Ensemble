@@ -1,0 +1,44 @@
+# Ignore all .tga files
+*.tga
+
+# Ignore macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Ignore Linux and Unix system files
+*~
+.nfs*
+
+# Ignore Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Ignore backup files
+*.bak
+*.tmp
+*.swp
+*.swo
+*.old
+*.orig
+
+# Ignore log files
+*.log
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore other temporary files
+*.temp
+*.out
+
+# Ignore application-specific files
+*.sublime-workspace
+*.sublime-project
+.idea/
+.vscode/
+*.iml
+

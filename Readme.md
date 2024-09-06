@@ -1,20 +1,28 @@
 # Code used for all-atom entanglement analysis
-* `example_entanglement_analysis`: contains code and an example trajectory for entanglement analysis
-* `super_arhenius_analysis`: Super-Arrhenius analysis for estimating the disentanglement/unfolding time from temperature jump simulations
+
+* `example_entanglement_analysis`: Contains code and an example trajectory for entanglement analysis. 
+
+* ispE: Includes all analyses related to the ispE protein.
  
-Please check `Readme` file in each sub-analysis.
+Please refer to the `README` file within each sub-analysis folder for more details.
 
 Package requirements:
+----------------------
+To run the scripts, the following Python packages are required:
+
 ```bash
 python3
 numpy
 pandas
+scipy
 matplotlib
 MDAnalysis
 parmed
-scipy
+mdtraj
+msmtools
+pyemma
+freesasa
+topoly
 ```
-All analyses in this repo can be run on a personal computer.
 
-**Note**:
-<u>We have tested these codes on the Linux environment (KDE Neon) with Python and all package installed from `conda`</u>
+These packages can be installed from conda or pip
