@@ -1,4 +1,4 @@
-# Code used for all-atom entanglement analysis
+# A newly identified class of protein misfolding is observed in all-atom folding simulations and supported by experimental structural ensembles
 
 * `example_entanglement_analysis`: Contains code and an example trajectory for entanglement analysis. 
 
