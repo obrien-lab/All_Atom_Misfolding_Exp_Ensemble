@@ -2,7 +2,7 @@
 
 * `example_entanglement_analysis`: Contains code and an example trajectory for entanglement analysis. 
 
-* ispE: Includes all analyses related to the ispE protein.
+* `ispE`: Includes all analyses related to the ispE protein.
  
 Please refer to the `README` file within each sub-analysis folder for more details.
 
