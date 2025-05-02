@@ -25,4 +25,7 @@ freesasa
 topoly
 ```
 
-These packages can be installed from conda or pip
+These packages can be installed from conda or pip.
+# Interactive Visualization
+To explore the misfolded and native states interactively as shown in Fig. 3b of the paper, visit:
+https://obrien-lab.github.io/All_Atom_Misfolding_Exp_Ensemble
