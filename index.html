@@ -1,0 +1,923 @@
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style type="text/css">
+       .loading{
+            width: 30vmin;
+            height: 30vmin;
+            margin: 0 auto;
+            border-radius: 50%;
+            border-top: 5vmin solid skyblue;
+            border-right: 5vmin solid skyblue;
+            border-bottom: 5vmin solid skyblue;
+            border-left: 5vmin solid rgba(255, 255, 255, 0);
+            animation: load 1s linear infinite;
+            -moz-animation:load 1s linear infinite;
+            -webkit-animation: load 1s linear infinite;
+            -o-animation:load 1s linear infinite;
+        }
+        @-webkit-keyframes load
+        {
+            from{-webkit-transform:rotate(0deg);}
+            to{-webkit-transform:rotate(360deg);}
+        }
+        @-moz-keyframes load
+        {
+            from{-moz-transform:rotate(0deg);}
+            to{-moz-transform:rotate(360deg);}
+        }
+        @-o-keyframes load
+        {
+            from{-o-transform:rotate(0deg);}
+            to{-o-transform:rotate(360deg);}
+        }
+        .cont5 {  
+          background: #fff; 
+          background: linear-gradient(90deg, rgba(240, 255, 255, .5) 50%, transparent 0), linear-gradient(rgba(240, 255, 255, .5) 50%, transparent 0); 
+          background-size: 30px 30px; 
+        }
+        .main_text{
+          text-align: justify; 
+          font-family: Arial;
+          font-weight: bold;
+          font-size: 1.6vmin;
+        }
+        .main_text p{
+          margin-block-start: 0;
+          margin-block-end: 0.4em;
+          line-height:1.6vmin;
+        }
+        .notes{
+          text-align: justify; 
+          font-family: Arial;
+          font-weight: normal;
+          font-size: 1.5vmin;
+        }
+        .notes p{
+          margin-block-start: 0;
+          margin-block-end: 0.4em;
+          line-height:1.6vmin;
+        }
+        .footnotes{
+          text-align: right; 
+          font-family: Arial;
+          font-weight: normal;
+          font-size: 1.4vmin;
+        }
+        .footnotes p{
+          margin-block-start: 0;
+          margin-block-end: 0.4em;
+          line-height:1.4vmin;
+        }
+    </style>
+</head>
+
+<html>
+<body class="cont5" style="overflow: hidden; touch-action: none;">
+<div id="title_div" style="width:100%; height:8%; background-color: rgba(34,110,147,1); font-size: 2.0vw; font-family: Arial; color: white; display: table;">
+  <div style="vertical-align: middle; display: table-cell; padding-left: 2%;">
+    Misfolded protein structures with non-native topological entanglements
+  </div>
+</div>
+
+<div id="loading_div" style="margin: auto; top: 0; left: 0; right: 0; bottom: 0; width:90vmin; height:40vmin; position: absolute; text-align: center;">
+  <div id="loading" class="loading"></div>
+  <div style="font-size: 3vmin; font-family: Arial;"><br>Loading javascripts. Refresh this page if it has no response.</div>
+</div>
+
+<script src="https://nglviewer.org/ngl/js/ngl.js"></script>
+<script src="https://unpkg.com/three"></script>
+
+<div id="main_div" style="width:80%; height:51%; margin-left: 10%;">
+  <div id="left_panel" style="float: left; width:20%; height:100%; background-color: #F0F8FF">
+    <div id="cntrl_panel" style="height:31.5%; background-color: #F0F8FF; position: relative;"></div>
+    <div id="topo_panel" style="height:68.5%; background-color: #F0FFF0; overflow: auto; position: relative;"></div>
+  </div>
+  <div id="viewport" style="float: right; width:80%; height:100%; overflow: hidden;"></div>
+</div>
+
+<script type="text/javascript">
+  document.getElementById('viewport').onmouseover=function(){
+    document.body.style.overflow='hidden';
+  }
+</script>
+
+<div style="width:80%; height:5%; display: table; margin-left: 10%;">
+  <div id="info" style="text-align: center; font-size: 1.0vw; font-family: Arial; background-color: #FFF0F5; vertical-align: middle; display: table-cell;"></div>
+</div>
+
+<div id="legend" style="width:80%; height:5%; text-align: center; margin-top:0.5%; margin-left: 10%;">
+  <svg width="15%" height="50%" viewBox="0 0 200 20">
+    <rect x="20" y="6" width="3" height="8" stroke="black" stroke-width="0" fill="orange" />
+    <rect x="25" y="6" width="3" height="8" stroke="black" stroke-width="0" fill="orange" />
+    <rect x="30" y="6" width="3" height="8" stroke="black" stroke-width="0" fill="orange" />
+    <rect x="35" y="6" width="3" height="8" stroke="black" stroke-width="0" fill="orange" />
+    <rect x="40" y="6" width="3" height="8" stroke="black" stroke-width="0" fill="orange" />
+    <rect x="45" y="6" width="3" height="8" stroke="black" stroke-width="0" fill="orange" />
+    <circle cx="18" cy="10" r="8" stroke="black" stroke-width="2" fill="orange" />
+    <circle cx="50" cy="10" r="8" stroke="black" stroke-width="2" fill="orange" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Native contact;</text>
+  </svg>
+  <svg width="17%" height="50%" viewBox="0 0 220 20">
+    <rect x="2" y="2" width="60" height="16" stroke="black" stroke-width="2" fill="#E6E6FA" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Misfolded protein;</text>
+  </svg>
+  <svg width="28%" height="50%" viewBox="0 0 380 20">
+    <rect x="2" y="2" width="60" height="16" stroke="black" stroke-width="2" fill="#FF0000" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Closed loop formed by the native contact;</text>
+  </svg>
+  <svg width="15%" height="50%" viewBox="0 0 220 20">
+    <rect x="2" y="2" width="60" height="16" stroke="black" stroke-width="2" fill="#0000FF" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Threading segment;</text>
+  </svg>
+  <br>
+  <svg width="15%" height="50%" viewBox="0 0 200 20">
+    <rect x="2" y="2" width="60" height="16" stroke="black" stroke-width="2" fill="#F0FFF0" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Native protein;</text>
+  </svg>
+  <svg width="25%" height="50%" viewBox="0 0 340 20">
+    <rect x="2" y="2" width="60" height="16" stroke="black" stroke-width="2" fill="#FFFF00" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Native structure of the </text>
+    <rect x="234" y="2" width="20" height="16" stroke="black" stroke-width="2" fill="#FF0000" />
+    <text fill="black" font-size="16" font-family="Arial" x="260" y="15">region;</text>
+  </svg>
+  <svg width="25%" height="50%" viewBox="0 0 340 20">
+    <rect x="2" y="2" width="60" height="16" stroke="black" stroke-width="2" fill="#32CD32" />
+    <text fill="black" font-size="16" font-family="Arial" x="70" y="15">Native structure of the </text>
+    <rect x="234" y="2" width="20" height="16" stroke="black" stroke-width="2" fill="#0000FF" />
+    <text fill="black" font-size="16" font-family="Arial" x="260" y="15">region;</text>
+  </svg>
+</div>
+
+<script>
+document.getElementById("loading_div").style.visibility="hidden"
+
+// Create NGL Stage object
+var stage = new NGL.Stage( "viewport" );
+
+// Handle window resizing
+window.addEventListener( "resize", function( event ){
+    stage.handleResize();
+}, false );
+
+
+// Code for example: interactive/simple-viewer
+stage.setParameters({
+  backgroundColor: "white"
+})
+
+function addElement (container, el) {
+  Object.assign(el.style, {
+    position: "absolute",
+    zIndex: 10
+  })
+  container.appendChild(el)
+}
+
+function createElement (name, properties, style) {
+  var el = document.createElement(name)
+  Object.assign(el, properties)
+  Object.assign(el.style, style)
+  return el
+}
+
+function createSelect (options, properties, style) {
+  var select = createElement("select", properties, style)
+  options.forEach(function (d) {
+    select.add(createElement("option", {
+      value: d[ 0 ], text: d[ 1 ]
+    }))
+  })
+  return select
+}
+
+function createFileButton (label, properties, style) {
+  var input = createElement("input", Object.assign({
+    type: "file"
+  }, properties), { display: "none" })
+  addElement(document.getElementById("cntrl_panel"), input)
+  var button = createElement("input", {
+    value: label,
+    type: "button",
+    onclick: function () { input.click() }
+  }, style)
+  return button
+}
+
+// recenter the structure in the scene
+function reset_view() {
+  var sele_1 = ""
+  var sele_2 = ""
+  stage.getRepresentationsByName("ligand")
+    .setVisibility(ligandCheckbox.checked)
+  if (ligandCheckbox.checked) {
+    sele_2 += "(" + sele_dict["ligand"] + ") or "
+  }
+  stage.getRepresentationsByName("protein_2")
+    .setVisibility(nativeCheckbox.checked)
+  stage.getRepresentationsByName("circle_2")
+    .setVisibility(nativeCheckbox.checked)
+  stage.getRepresentationsByName("thread_2")
+    .setVisibility(nativeCheckbox.checked)
+  if (nativeCheckbox.checked) {
+    sele_2 += "(" + sele_dict["protein_2"] + ")"
+  }
+  stage.getRepresentationsByName("protein_1")
+    .setVisibility(stateCheckbox.checked)
+  stage.getRepresentationsByName("ribosome")
+    .setVisibility(stateCheckbox.checked)
+  stage.getRepresentationsByName("tRNAs")
+    .setVisibility(stateCheckbox.checked)
+  if (stateCheckbox.checked) {
+    sele_1 += "(" + sele_dict["protein_1"] + ") or (" + sele_dict["ribosome"] + ") or (" + sele_dict["tRNAs"] + ") or "
+  }
+  stage.getRepresentationsByName("circle_1")
+    .setVisibility(entanglementCheckbox.checked)
+  stage.getRepresentationsByName("thread_1")
+    .setVisibility(entanglementCheckbox.checked)
+  stage.getRepresentationsByName("NC_atoms")
+    .setVisibility(entanglementCheckbox.checked)
+  stage.getRepresentationsByName("native contact")
+    .setVisibility(entanglementCheckbox.checked)
+  if (entanglementCheckbox.checked) {
+    sele_1 += "(" + sele_dict["circle_1"] + ") or (" + sele_dict["thread_1"] + ")"
+  }
+
+  if (sele_1.length > 0 && sele_1[sele_1.length-1] == " ") {
+    sele_1 = sele_1.substr(0, sele_1.length-4)
+  }
+  if (sele_2.length > 0 && sele_2[sele_2.length-1] == " ") {
+    sele_2 = sele_2.substr(0, sele_2.length-4)
+  }
+
+  sele_1 = sele_1.trim()
+  sele_2 = sele_2.trim()
+  
+  var new_box = null
+
+  if (sele_1.length > 0) {
+    var box = struct[0].structure.getBoundingBox(new NGL.Selection(sele_1))
+    if (new_box == null) {
+      new_box = box
+    }
+    else {
+      new_box = new_box.union(box)
+    }
+  }
+
+  if (sele_2.length > 0) {
+    var box = struct[1].structure.getBoundingBox(new NGL.Selection(sele_2))
+    if (new_box == null) {
+      new_box = box
+    }
+    else {
+      new_box = new_box.union(box)
+    }
+  }
+
+  if (new_box != null) {
+    var new_box_center = new NGL.Vector3()
+    new_box.getCenter(new_box_center)
+    stage.animationControls.zoomMove(
+      new_box_center,
+      stage.getZoomForBox(new_box),
+      1000
+    )
+  }
+}
+
+// calculate gN and gC
+function calc_g(g_list, M, resid_1, resid_2) {
+  var terminal_cutoff = 5
+  var range = [[terminal_cutoff, (resid_1-1)-4], [(resid_2-1)+4, M.length-terminal_cutoff]]
+  var i;
+  for (i = 0; i < 2; i++) {
+    var j1;
+    var g = 0;
+    for (j1 = resid_1-1; j1 < resid_2-1; j1++) {
+      var j2;
+      for (j2 = range[i][0]; j2 < range[i][1]; j2++) {
+        g += M[j1][j2];
+      }
+    }
+    g = Math.round(g/4/3.14)
+    g_list.push(g)
+  }
+}
+
+// Generate the topology graph
+function create_topo_graph (topo_graph, gN, gC, resid_1, resid_2) {
+  var  svgns = "http://www.w3.org/2000/svg";
+
+  var center_x = 32
+  var center_y = 28
+  var r_1 = 12
+  var r_2 = 24
+  var angle_start = 45/180*3.14
+  var angle_end = 170/180*3.14
+
+  topo_graph.innerHTML = ""
+
+  var graph = document.createElementNS(svgns, "svg")
+  graph.setAttribute("width", "100%")
+  graph.setAttribute("height", "100%")
+  graph.setAttribute("viewBox", "0 0 64 64")
+  
+  var graph_html_list = []
+  var curve_width = "2.5%"
+  var edge_width = "5%"
+  // add the closed loop
+  var curve_color = "red"
+  var edge_color = "white"
+  var base_string = "<path d='M28 50 C28 48 28 46 24 44 C10 38 8 12 32 12 C56 12 54 38 40 44 C36 46 36 48 36 50' "
+  graph_html_list.push(base_string+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+
+  var curve_color = "gray"
+  var edge_color = "white"
+  var base_string = "<path d='M22 52 C24 56 28 54 28 50' "
+  graph_html_list.push(base_string+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+  var base_string = "<path d='M36 50 C36 54 40 56 42 52' "
+  graph_html_list.push(base_string+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+
+  // add N-ter entanglements
+  var end_x = 22;
+  var end_y = 52;
+  if (gN != 0) {
+    var curve_color = "blue"
+    var edge_color = "white"
+    var delta_angle = (angle_end - angle_start) / Math.abs(gN);
+    var i;
+    for (i = 0; i < Math.abs(gN); i++) {
+      var angle = angle_start + delta_angle * i;
+      var x1 = center_x - r_1 * Math.sin(angle)
+      var y1 = center_y + r_1 * Math.cos(angle)
+      var x2 = center_x - r_2 * Math.sin(angle)
+      var y2 = center_y + r_2 * Math.cos(angle)
+      var base_string_1 = "<path d='M"+end_x.toString()+" "+end_y.toString()+" C"+(end_x-2).toString()+" "+(end_y-4).toString()+" "+(x1+2).toString()+" "+(y1+4).toString()+" "+x1.toString()+" "+y1.toString()+"' "
+      var base_string_2 = "<path d='M"+x1.toString()+" "+y1.toString()+" C"+(x1-2).toString()+" "+(y1-4).toString()+" "+(x2+2).toString()+" "+(y2+4).toString()+" "+x2.toString()+" "+y2.toString()+"' "
+      
+      if (gN > 0) {
+        graph_html_list.unshift(base_string_1+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_1+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+        graph_html_list.push(base_string_2+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_2+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+      }
+      else {
+        graph_html_list.push(base_string_1+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_1+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+        graph_html_list.unshift(base_string_2+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_2+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+      }
+
+      end_x = x2
+      end_y = y2
+    }
+  }
+  var curve_color = "gray"
+  var edge_color = "white"
+  var x1 = 4
+  var y1 = end_y
+  var base_string = "<path d='M"+end_x.toString()+" "+end_y.toString()+" C"+(end_x-2).toString()+" "+(end_y-4).toString()+" "+(x1+4).toString()+" "+(y1+2).toString()+" "+x1.toString()+" "+y1.toString()+"' "
+  graph_html_list.push(base_string+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+  graph_html_list.push("<text text-anchor='start' fill='black' font-size='30%' font-family='Arial' x=1 y="+(end_y+6).toString()+"> N-ter </text>")
+
+  // add C-ter entanglements
+  var end_x = 42;
+  var end_y = 52;
+  if (gC != 0) {
+    var curve_color = "blue"
+    var edge_color = "white"
+    var delta_angle = (angle_end - angle_start) / Math.abs(gC);
+    var i;
+    for (i = 0; i < Math.abs(gC); i++) {
+      var angle = angle_start + delta_angle * i;
+      var x1 = center_x + r_1 * Math.sin(angle)
+      var y1 = center_y + r_1 * Math.cos(angle)
+      var x2 = center_x + r_2 * Math.sin(angle)
+      var y2 = center_y + r_2 * Math.cos(angle)
+      var base_string_1 = "<path d='M"+end_x.toString()+" "+end_y.toString()+" C"+(end_x+2).toString()+" "+(end_y-4).toString()+" "+(x1-2).toString()+" "+(y1+4).toString()+" "+x1.toString()+" "+y1.toString()+"' "
+      var base_string_2 = "<path d='M"+x1.toString()+" "+y1.toString()+" C"+(x1+2).toString()+" "+(y1-4).toString()+" "+(x2-2).toString()+" "+(y2+4).toString()+" "+x2.toString()+" "+y2.toString()+"' "
+      
+      if (gC < 0) {
+        graph_html_list.unshift(base_string_1+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_1+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+        graph_html_list.push(base_string_2+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_2+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+      }
+      else {
+        graph_html_list.push(base_string_1+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_1+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+        graph_html_list.unshift(base_string_2+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string_2+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+      }
+
+      end_x = x2
+      end_y = y2
+    }
+  }
+  var curve_color = "gray"
+  var edge_color = "white"
+  var x1 = 60
+  var y1 = end_y
+  var base_string = "<path d='M"+end_x.toString()+" "+end_y.toString()+" C"+(end_x+2).toString()+" "+(end_y-4).toString()+" "+(x1-4).toString()+" "+(y1+2).toString()+" "+x1.toString()+" "+y1.toString()+"' "
+  graph_html_list.push(base_string+"stroke='"+edge_color+"' stroke-width='"+edge_width+"' fill='none'/>"+base_string+"stroke='"+curve_color+"' stroke-width='"+curve_width+"' fill='none'/>")
+  graph_html_list.push("<text text-anchor='end' fill='black' font-size='30%' font-family='Arial' x=63 y="+(end_y+6).toString()+"> C-ter </text>")
+
+  // add native contacts
+  graph_html_list.push("<line x1=28 y1=50 x2=36 y2=50 stroke='orange' stroke-width='"+curve_width.toString()+"' stroke-dasharray='1% 0.5%' />")
+  graph_html_list.push("<circle cx=28 cy=50 r=2 stroke='black' stroke-width='1%' fill='orange' />")
+  graph_html_list.push("<circle cx=36 cy=50 r=2 stroke='black' stroke-width='1%' fill='orange' />")
+  graph_html_list.push("<text text-anchor='end' fill='black' font-size='25%' font-family='Arial' x=30 y=60> "+resid_1.toString()+" </text>")
+  graph_html_list.push("<text text-anchor='start' fill='black' font-size='25%' font-family='Arial' x=34 y=60> "+resid_2.toString()+" </text>")
+  
+  // add title
+  var ggN = gN.toString()
+  if (gN > 0) { ggN = "+"+ggN }
+  var ggC = gC.toString()
+  if (gC > 0) { ggC = "+"+ggC }
+  graph_html_list.push("<text text-anchor='middle' fill='black' font-size='30%' font-family='Arial' x=32 y=6> "+
+    "<tspan> <tspan font-style='italic'>g</tspan><tspan font-size='70%' baseline-shift='sub'>N</tspan> = "+ggN+"; <tspan font-style='italic'>g</tspan><tspan font-size='70%' baseline-shift='sub'>C</tspan> = "+ggC+" </tspan>"
+    +" </text>")
+  
+  var graph_html = graph_html_list.join(" ")
+  graph.innerHTML = graph_html
+
+  topo_graph.appendChild(graph)
+}
+
+// load structure and show entanglements
+var sele_dict = {}
+var struct = []
+
+function loadStructure (arg_str) {
+  stage.removeAllComponents()
+
+  var argvs = arg_str.split('&')
+  //var url_1 = "https://cdn.jsdelivr.net/gh/yuj179/topo_entanglements/structure_pdb/"+argvs[0]+".pdb" //url for state structure
+  var url_1 = "./state_structures/"+argvs[0]+".pdb" //url for state structure
+  var s1 = "1-"+argvs[1] //select protein
+  var s2 = argvs[2] //select circle
+  var s3 = argvs[3] //select thread
+
+  var words = s2.split(' or ')
+  var s4 = ""
+  for (i = 0; i < words.length; i++) {
+    var w = words[i].split('(').slice(-1)[0].split(')')[0].split('-')
+    s4 += w[0] + ' or ' + w[1] + ' or '
+  }
+  s4 = "(" + s4.substr(0, s4.length - 4) + ") and .CA" //select NC atoms
+
+  var atom_pairs = [] //select NC atom pairs
+  for (i = 0; i < words.length; i++) {
+    var w = words[i].split('(').slice(-1)[0].split(')')[0].split('-')
+    atom_pairs.push([w[0] + '.CA', w[1] + '.CA'])
+  }
+
+  //var url_2 = "rcsb://"+argvs[4] //url for native protein pdb
+  var url_2 = "https://files.rcsb.org/download/"+argvs[4]+".pdb"
+  var chain_sel = ":"+argvs[5]
+  var offset = Number(argvs[6])
+  var s5 = chain_sel + " and " + (1+offset).toString()+"-"+(Number(argvs[1])+offset).toString() //select protein
+  
+  var s6 = chain_sel + " and " //select circle
+  for (i = 0; i < words.length; i++) {
+    var w = words[i].split('(').slice(-1)[0].split(')')[0].split('-')
+    s6 += "("+(Number(w[0])+offset).toString()+"-"+(Number(w[1])+offset).toString()+") or "
+  }
+  s6 = s6.substr(0, s6.length - 4)
+
+  var s7 = chain_sel + " and " //select thread
+  words = s3.split(' or ')
+  for (i = 0; i < words.length; i++) {
+    var w = words[i].split('(').slice(-1)[0].split(')')[0].split('-')
+    s7 += "("+(Number(w[0])+offset).toString()+"-"+(Number(w[1])+offset).toString()+") or "
+  }
+  s7 = s7.substr(0, s7.length - 4)
+
+  var s8 = chain_sel + " and " + argvs[7] //select ligands
+  
+  var superpose_sel_1 = "(" + argvs[8]+") and .CA" //select for superpose of state structure
+  var superpose_sel_2 = "" //select for superpose of state structure
+  words = argvs[8].split(' or ')
+  for (i = 0; i < words.length; i++) {
+    var w = words[i].split('(').slice(-1)[0].split(')')[0].split('-')
+    superpose_sel_2 += "("+(Number(w[0])+offset).toString()+"-"+(Number(w[1])+offset).toString()+") or "
+  }
+  superpose_sel_2 = "(" + superpose_sel_2.substr(0, superpose_sel_2.length - 4) + ") and .CA and (%A or % )"
+  //console.log(superpose_sel_1)
+  //console.log(superpose_sel_2)
+
+  var Q = argvs[9]
+  var G = argvs[10]
+  var ent_info = argvs[11]
+
+  var if_ribosome = false
+
+  document.getElementById("info").innerHTML = "Loading structures... (if no response for a long time, please refresh this page)"
+  
+  // re-initialize the topology graph panels
+  topo_graph_div.innerHTML = ""
+  topo_graph_div.style.height = (div_length*atom_pairs.length).toString()+"vw"
+  var i;
+  var topo_graph_div_list = []
+  for(i = 0; i < atom_pairs.length; i++) {
+    var topo_sub_div = createElement("div", 
+        { id: "topo_div_"+(i+1).toString() }, 
+        { top: (i/atom_pairs.length*100)+"%", 
+          left: "0%", 
+          width: "100%",
+          height: (1/atom_pairs.length*100)+"%",
+          textAlign: "center",
+          backgroundColor: "white",
+          border: "2px solid black"})
+    if (i != 0) {
+      topo_sub_div.style.borderTop = "none"
+    }
+    topo_graph_div.appendChild(topo_sub_div)
+    topo_graph_div_list.push(topo_sub_div)
+  }
+  
+  // load structure and show entanglements
+  Promise.all([
+    stage.loadFile(url_1, {ext: 'pdb'}).then(function (o) {
+      o.autoView()
+      o.addRepresentation('cartoon', {
+        sele: s1,
+        color: "#E6E6FA",
+        name: "protein_1"
+      })
+      sele_dict["protein_1"] = s1
+      o.addRepresentation('cartoon', {
+        sele: s2,
+        color: "#FF0000",
+        name: "circle_1"
+      })
+      sele_dict["circle_1"] = s2
+      o.addRepresentation('cartoon', {
+        sele: s3,
+        color: "#0000FF",
+        name: "thread_1"
+      })
+      sele_dict["thread_1"] = s3
+      o.addRepresentation('spacefill', {
+        sele: s4,
+        color: "#FFA500",
+        name: "NC_atoms"
+      })
+      //o.addRepresentation('distance', {
+        //atomPair: atom_pairs,
+        //labelVisible: false,
+        //radius: 0.30,
+        //color: "#FFA500",
+        //name: "native contact"
+      //})
+      return o
+    }),
+
+    stage.loadFile(url_2, {sele: chain_sel}).then(function (o) {
+      o.autoView()
+      o.addRepresentation('cartoon', {
+        sele: s5,
+        color: "#F0FFF0",
+        name: "protein_2"
+      })
+      sele_dict["protein_2"] = s5
+      o.addRepresentation('cartoon', {
+        sele: s6,
+        color: "#FFFF00",
+        name: "circle_2"
+      })
+      sele_dict["circle_2"] = s6
+      o.addRepresentation('cartoon', {
+        sele: s7,
+        color: "#32CD32",
+        name: "thread_2"
+      })
+      sele_dict["thread_2"] = s7
+      o.addRepresentation('spacefill', {
+        sele: s8,
+        scale: 0.8,
+        name: "ligand"
+      })
+      sele_dict["ligand"] = s8
+      return o
+    })
+  ]).then(function (ol) {
+    ol[0].superpose(ol[1], false, superpose_sel_1, superpose_sel_2)
+    ol[0].autoView()
+
+    // add native contacts
+    var dash_length = 0.6
+    var dash_space = 0.4
+    for(var i = 0; i < atom_pairs.length; i++) {
+        var nc_cor = []
+        var sel = atom_pairs[i].join(" or ")
+        ol[0].structure.eachAtom(function (ap) {
+          nc_cor.push([ap.x, ap.y, ap.z])
+        }, new NGL.Selection(sel))
+        var shape = new NGL.Shape("native contact", { dashedCylinder: true, radialSegments: 60 })
+        var direction = [ nc_cor[1][0] - nc_cor[0][0], 
+                          nc_cor[1][1] - nc_cor[0][1], 
+                          nc_cor[1][2] - nc_cor[0][2] ]
+        var nc_length = (direction[0]**2 + direction[1]**2 + direction[2]**2)**0.5
+        var norm_dir = [ direction[0]/nc_length, direction[1]/nc_length, direction[2]/nc_length ]
+        var num_dash = Math.floor(nc_length / (dash_length+dash_space))
+        for(var j = 0; j < num_dash; j++) {
+          var dir = [ norm_dir[0]*(dash_length+dash_space)*j, 
+                      norm_dir[1]*(dash_length+dash_space)*j,
+                      norm_dir[2]*(dash_length+dash_space)*j ]
+          var ps = [ nc_cor[0][0]+dir[0],
+                     nc_cor[0][1]+dir[1],
+                     nc_cor[0][2]+dir[2] ]
+          var pe = [ ps[0]+norm_dir[0]*dash_length,
+                     ps[1]+norm_dir[1]*dash_length,
+                     ps[2]+norm_dir[2]*dash_length ]
+          shape.addCylinder(ps, pe, [ 1, 0.647, 0 ], 0.4, "Native contact " + (i+1))
+        }
+        var shapeComp = stage.addComponentFromObject(shape)
+        shapeComp.addRepresentation("buffer", {name: "native contact"})
+      }
+
+    // show ribosome
+    if (if_ribosome) {
+        ol[0].addRepresentation("surface", {
+          sele: "not ("+s1+" or :A or :P)",
+          probeRadius: 6.0,
+          scaleFactor: 0.35,
+          surfaceType: "av",
+          color: "white",
+          opacity: 0.75,
+          side: "front",
+          opaqueBack: true,
+          metalness: 0,
+          roughness: 1,
+          useWorker: false,
+          name: "ribosome"
+        })
+        sele_dict["ribosome"] = "not ("+s1+" or :A or :P)"
+        ol[0].addRepresentation("surface", {
+          sele: "not ("+s1+") and (:A or :P)",
+          probeRadius: 4.0,
+          scaleFactor: 0.5,
+          surfaceType: "av",
+          color: "orange",
+          metalness: 0,
+          roughness: 1,
+          useWorker: false,
+          name: "tRNAs"
+        })
+        sele_dict["tRNAs"] = "not ("+s1+") and (:A or :P)"
+      }
+      else {
+        sele_dict["ribosome"] = ""
+        sele_dict["tRNAs"] = ""
+      }
+
+    struct = ol
+
+    reset_view()
+
+    document.getElementById("info").innerHTML = "<i>Q</i> = "+Q+" and <i>G</i> = "+G+"<br>"+ent_info
+
+    // Get Ca trace
+    var CA_cor_list = [];
+    ol[0].structure.eachAtom(function (ap) {
+      CA_cor_list.push([ap.x, ap.y, ap.z])
+    }, new NGL.Selection(".CA"))
+    // Get curve coordinates
+    var R = []
+    var dR = []
+    var n_atom = CA_cor_list.length;
+    var i;
+    for(i = 0; i < n_atom-1; i++) {
+      R.push([(CA_cor_list[i][0]+CA_cor_list[i+1][0])/2, (CA_cor_list[i][1]+CA_cor_list[i+1][1])/2, (CA_cor_list[i][2]+CA_cor_list[i+1][2])/2])
+      dR.push([CA_cor_list[i+1][0]-CA_cor_list[i][0], CA_cor_list[i+1][1]-CA_cor_list[i][1], CA_cor_list[i+1][2]-CA_cor_list[i][2]])
+    }
+    // Gauss integral contents
+    var M = [];
+    var i;
+    for(i = 0; i < n_atom-1; i++) {
+      M.push([])
+      var j;
+      for(j = 0; j < n_atom-1; j++) {
+        M[i].push(0)
+      }
+    }
+    var i;
+    for(i = 0; i < n_atom-2; i++) {
+      var j;
+      for(j = i+1; j < n_atom-1; j++) {
+        var v1 = [R[i][0]-R[j][0], R[i][1]-R[j][1], R[i][2]-R[j][2]]
+        var v1_n = (v1[0]**2+v1[1]**2+v1[2]**2)**(3/2)
+        var v11 = [v1[0]/v1_n, v1[1]/v1_n, v1[2]/v1_n]
+        var v2 = [dR[i][1]*dR[j][2]-dR[i][2]*dR[j][1], dR[i][2]*dR[j][0]-dR[i][0]*dR[j][2], dR[i][0]*dR[j][1]-dR[i][1]*dR[j][0]]
+        M[i][j] = v11[0]*v2[0] + v11[1]*v2[1] + v11[2]*v2[2]
+        M[j][i] = M[i][j]
+      }
+    }
+    //Calculate gN and gC
+    var i;
+    for(i = 0; i < atom_pairs.length; i++) {
+      var res_idx = []
+      var sel = atom_pairs[i].join(" or ")
+      ol[0].structure.eachAtom(function (ap) {
+        res_idx.push(ap.resno)
+      }, new NGL.Selection(sel))
+      var g_list = []
+      calc_g(g_list, M, res_idx[0], res_idx[1])
+      create_topo_graph(topo_graph_div_list[i], g_list[0], g_list[1], res_idx[0], res_idx[1])
+    }
+  })
+}
+
+//////////////////////// Generate page contents //////////////////////////////
+addElement(document.getElementById("cntrl_panel"), createElement("span", {
+  innerText: "Select an example below:"
+}, { top: "1%", 
+     left: "1%", 
+     "font-family": "Arial", 
+     "font-size": "1.6vmin"}))
+
+// Select syntax: 
+// Github file name & chain length & circle_sel & thread_sel & Pdb ID & chain ID & offset & ligand_sel & superpose_sel & Q & G & info
+var StructSelect = createSelect([
+  [ "state_0&283&151-198&5-25&2ww4&A&0&ADP&1-283&0.77&0.11&GLN = [0.73, -0.38]; GLN<sub>ref</sub> = [-0.03, -0.39]", "State 0" ],
+  [ "state_1&283&38-109&168-188&2ww4&A&0&ADP&1-283&0.81&0.20&GLN = [0.14, -1.18]; GLN<sub>ref</sub> = [-0.14, -0.03]", "State 1" ],
+  [ "state_2&283&28-195&5-17&2ww4&A&0&ADP&1-283&0.93&0.05&GLN = [-0.17, -0.31]; GLN<sub>ref</sub> = [-1.09, -0.51]", "State 2" ],
+  [ "state_3&283&28-195&5-17&2ww4&A&0&ADP&1-283&0.87&0.05&GLN = [-0.20, -0.31]; GLN<sub>ref</sub> = [-1.09, -0.51]", "State 3" ],
+  [ "state_4&283&16-26&181-201&2ww4&A&0&ADP&1-283&0.89&0.29&GLN = [-0.00, -0.83]; GLN<sub>ref</sub> = [-0.01, -0.17]", "State 4" ],
+], {
+  onchange: function (e) {
+    loadStructure(e.target.value)
+  }
+}, { top: "15%", 
+     left: "1%",
+     "font-family": "Arial", 
+     "font-size": "1.2vmin"})
+addElement(document.getElementById("cntrl_panel"), StructSelect)
+
+var centerButton = createElement("input", {
+  type: "button",
+  value: "Center",
+  title: "Center this molecule in the scene",
+  onclick: function () {
+    reset_view()
+  }
+}, { top: "15%", 
+     left: "48%",
+     "font-family": "Arial", 
+     "font-size": "1.1vmin" })
+addElement(document.getElementById("cntrl_panel"), centerButton)
+
+var downloadButton = createElement("input", {
+  type: "button",
+  value: "Download",
+  title: "Download the pdb file",
+  onclick: function () {
+    var arg_str = StructSelect.value
+    var argvs = arg_str.split('&')
+    var url = "./structure_pdb/"+argvs[0]+".pdb" //url for state structure
+    window.open(url)
+  }
+}, { top: "15%", 
+     left: "70%",
+     "font-family": "Arial", 
+     "font-size": "1.1vmin" })
+addElement(document.getElementById("cntrl_panel"), downloadButton)
+
+addElement(document.getElementById("cntrl_panel"), createElement("span", {
+  innerText: "Check/uncheck the following options to show/hide:"
+}, { top: "30%", 
+     left: "1%",
+     "font-family": "Arial", 
+     "font-size": "1.6vmin"}))
+
+var ligandCheckbox = createElement("input", {
+  type: "checkbox",
+  id: "ligandCheckbox",
+  checked: true,
+  onchange: function (e) {
+    stage.getRepresentationsByName("ligand")
+      .setVisibility(e.target.checked)
+  }
+}, { top: "54%", 
+     left: "1%", 
+     width: "1.4vmin",
+     height: "1.4vmin",
+     margin: "0.6vmin" })
+addElement(document.getElementById("cntrl_panel"), ligandCheckbox)
+var label = createElement("label", {
+  innerText: "Ligands",
+  }, { top: "57%", 
+       left: "14%",
+       "font-family": "Arial", 
+       "font-size": "1.4vmin" })
+label.setAttribute("for", "ligandCheckbox")
+addElement(document.getElementById("cntrl_panel"), label)
+
+var nativeCheckbox = createElement("input", {
+  type: "checkbox",
+  id: "nativeCheckbox",
+  checked: true,
+  onchange: function (e) {
+    stage.getRepresentationsByName("protein_2")
+      .setVisibility(e.target.checked)
+    stage.getRepresentationsByName("circle_2")
+      .setVisibility(e.target.checked)
+    stage.getRepresentationsByName("thread_2")
+      .setVisibility(e.target.checked)
+  }
+}, { top: "64%", 
+     left: "1%", 
+     width: "1.4vmin",
+     height: "1.4vmin",
+     margin: "0.6vmin" })
+addElement(document.getElementById("cntrl_panel"), nativeCheckbox)
+var label = createElement("label", {
+  innerText: "Native structure",
+  }, { top: "67%", 
+       left: "14%",
+       "font-family": "Arial", 
+       "font-size": "1.4vmin" })
+label.setAttribute("for", "nativeCheckbox")
+addElement(document.getElementById("cntrl_panel"), label)
+
+var stateCheckbox = createElement("input", {
+  type: "checkbox",
+  id: "stateCheckbox",
+  checked: true,
+  onchange: function (e) {
+    stage.getRepresentationsByName("protein_1")
+      .setVisibility(e.target.checked)
+    stage.getRepresentationsByName("ribosome")
+      .setVisibility(stateCheckbox.checked)
+    stage.getRepresentationsByName("tRNAs")
+      .setVisibility(stateCheckbox.checked)
+  }
+}, { top: "74%", 
+     left: "1%", 
+     width: "1.4vmin",
+     height: "1.4vmin",
+     margin: "0.6vmin" })
+addElement(document.getElementById("cntrl_panel"), stateCheckbox)
+var label = createElement("label", {
+  innerText: "Misfolded structure",
+  }, { top: "77%", 
+       left: "14%",
+       "font-family": "Arial", 
+       "font-size": "1.4vmin" })
+label.setAttribute("for", "stateCheckbox")
+addElement(document.getElementById("cntrl_panel"), label)
+
+var entanglementCheckbox = createElement("input", {
+  type: "checkbox",
+  id: "entanglementCheckbox",
+  checked: true,
+  onchange: function (e) {
+    stage.getRepresentationsByName("circle_1")
+      .setVisibility(e.target.checked)
+    stage.getRepresentationsByName("thread_1")
+      .setVisibility(e.target.checked)
+    stage.getRepresentationsByName("NC_atoms")
+      .setVisibility(e.target.checked)
+    stage.getRepresentationsByName("native contact")
+      .setVisibility(e.target.checked)
+  }
+}, { top: "84%", 
+     left: "1%", 
+     width: "1.4vmin",
+     height: "1.4vmin",
+     margin: "0.6vmin" })
+addElement(document.getElementById("cntrl_panel"), entanglementCheckbox)
+var label = createElement("label", {
+  innerText: "Entanglements",
+  }, { top: "87%", 
+       left: "14%",
+       "font-family": "Arial", 
+       "font-size": "1.4vmin" })
+label.setAttribute("for", "entanglementCheckbox")
+addElement(document.getElementById("cntrl_panel"), label)
+
+addElement(document.getElementById("topo_panel"), createElement("div", {
+  innerHTML: "Entanglement topology (<i>Noncovalent</i> lassos):"
+}, { top: "1%", 
+     left: "1%", 
+     "font-family": "Arial", 
+     "font-size": "1.6vmin"}))
+
+// initialize the topology graph panels
+var div_length = 14
+var topo_graph_div = createElement("div", 
+  { id: "topo_div" }, 
+  { top: "15%", 
+    left: "1%", 
+    width: div_length.toString()+"vw",
+    height: div_length.toString()+"vw",
+    textAlign: "center",
+    backgroundColor: "white"})
+addElement(document.getElementById("topo_panel"), topo_graph_div)
+
+loadStructure(StructSelect.value)
+</script>
+
+<HR style="margin-top: 1%;" width="80%" color=#987cb9 SIZE=3>
+
+<div id="bottom_div" style="width:80%; height:25%; margin-left: 10%; margin-top: 1%;">
+    <div class="footnotes" style="float: right; width:68%; height:18%; margin-top: 1%;">
+      <p>Created by <a href="https://orcid.org/0000-0003-1100-9177" target="_blank">Yang Jiang</a> at May 2025.</p>
+    </div>
+  </div>
+
+</body>
+</html>
