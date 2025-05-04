@@ -86,6 +86,11 @@
 
 <script src="https://nglviewer.org/ngl/js/ngl.js"></script>
 <script src="https://unpkg.com/three"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
 
 <div id="main_div" style="width:80%; height:51%; margin-left: 10%;">
   <div id="left_panel" style="float: left; width:20%; height:100%; background-color: #F0F8FF">
@@ -732,11 +737,11 @@ addElement(document.getElementById("cntrl_panel"), createElement("span", {
 // Select syntax: 
 // Github file name & chain length & circle_sel & thread_sel & Pdb ID & chain ID & offset & ligand_sel & superpose_sel & Q & G & info
 var StructSelect = createSelect([
-  [ "state_0&283&151-198&5-25&2ww4&A&0&ADP&1-283&0.77&0.11&GLN = [0.73, -0.38]; GLN<sub>ref</sub> = [-0.03, -0.39]", "State 0" ],
-  [ "state_1&283&38-109&168-188&2ww4&A&0&ADP&1-283&0.81&0.20&GLN = [0.14, -1.18]; GLN<sub>ref</sub> = [-0.14, -0.03]", "State 1" ],
-  [ "state_2&283&28-195&5-17&2ww4&A&0&ADP&1-283&0.93&0.05&GLN = [-0.17, -0.31]; GLN<sub>ref</sub> = [-1.09, -0.51]", "State 2" ],
-  [ "state_3&283&28-195&5-17&2ww4&A&0&ADP&1-283&0.87&0.05&GLN = [-0.20, -0.31]; GLN<sub>ref</sub> = [-1.09, -0.51]", "State 3" ],
-  [ "state_4&283&16-26&181-201&2ww4&A&0&ADP&1-283&0.89&0.29&GLN = [-0.00, -0.83]; GLN<sub>ref</sub> = [-0.01, -0.17]", "State 4" ],
+  [ "state_0&283&151-198&5-25&2ww4&A&0&ADP&1-283&0.77&0.11&GLN = [0.73, -0.38]; GLN<sub>ref</sub> = [-0.03, -0.39]", "State 𝓢₀" ],
+  [ "state_1&283&38-109&168-188&2ww4&A&0&ADP&1-283&0.81&0.20&GLN = [0.14, -1.18]; GLN<sub>ref</sub> = [-0.14, -0.03]", "State 𝓢₁" ],
+  [ "state_2&283&28-195&5-17&2ww4&A&0&ADP&1-283&0.93&0.05&GLN = [-0.17, -0.31]; GLN<sub>ref</sub> = [-1.09, -0.51]", "State 𝓢₂" ],
+  [ "state_3&283&28-195&5-17&2ww4&A&0&ADP&1-283&0.87&0.05&GLN = [-0.20, -0.31]; GLN<sub>ref</sub> = [-1.09, -0.51]", "State 𝓢₃" ],
+  [ "state_4&283&16-26&181-201&2ww4&A&0&ADP&1-283&0.89&0.29&GLN = [-0.00, -0.83]; GLN<sub>ref</sub> = [-0.01, -0.17]", "State 𝓢₄" ],
 ], {
   onchange: function (e) {
     loadStructure(e.target.value)
